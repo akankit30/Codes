@@ -1,11 +1,47 @@
 package introduction;
+import java.io.*;
+import java.util.*;
 
-
-
- 
 public class GFG {
-	public static void main(String args[]) {
+	static long mat[][];
+	static int log[];
+	static int max,k;
+	public static void main(String args[]) throws Exception {
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		max=Integer.parseInt(br.readLine());
+		String in[]=br.readLine().split("\\s+");
+		int [] arr=new int[max];
+		callog();
+		k=log[max];
 		
+	}
+	static void callog() {
+		log=new int[max+1];
+		log[1]=0;
+		for(int i=2;i<=max;i++) {
+			log[i]=log[i/2]+1;
+		}
+	}
+	static void build(int arr[]) {
+		mat=new long[max][k+1];
+		for(int i=0;i<max;i++) mat[i][0]=arr[i];
+		for(int j=1;j<=k;j++) {
+			for(int i=0;i+(1<<j)-1<max;i++) {
+				mat[i][j]=Math.min(mat[i][j-1], mat[i+(1<<(j-1))][j-1]);
+			}
+		}
+	}
+	
+	
+	static long sum(int l,int r) {
+		long ans=0;
+		for(int j=k;j>=0;j--) {
+			if(l+(1<<j)-1<=r) {
+				ans+=mat[l][j];
+				l+=(1<<j);
+			}
+		}
+		return ans;
 	}
 }
 

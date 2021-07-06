@@ -62,19 +62,14 @@ public class Sorting {
         }
     }
  
-    // Main function that sorts arr[l..r] using
-    // merge()
     public static void merge_sort(ArrayList<Integer> arr, int l, int r)
     {
         if (l < r) {
             // Find the middle point
             int m =l+ (r-l)/2;
- 
-            // Sort first and second halves
             merge_sort(arr, l, m);
             merge_sort(arr, m + 1, r);
  
-            // Merge the sorted halves
             merge(arr, l, m, r);
         }
     }
@@ -87,17 +82,7 @@ public class Sorting {
 			quickSort(arr,pi+1,high);
 		}
 	}
-//	private static int partition(int[]arr,int low,int high) {
-//		int pivot=arr[low];
-//		int i=low,j=high;
-//		while(i<j) {
-//			while(i<=high&&arr[i]<=pivot) i++;
-//			while(j>=low&&arr[j]>pivot) j--;
-//			if(i<j) swap(arr,i,j);
-//		}
-//		swap(arr,low,j);
-//		return j;
-//	}
+    
 	static int partition(int[] arr, int low, int high)
 	{
 	     

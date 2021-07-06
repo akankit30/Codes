@@ -17,21 +17,7 @@ public class Codeforces {
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    int n=fs.nextInt(),k=fs.nextInt(), m=fs.nextInt();
-	    int arr[]=fs.readArray(n);
-	    int xor=0;
-	    if(k%2!=0) {
-	    	
-	    	for(int i=m;i<=m+k;i++) {
-	    		xor^=arr[i];
-	    	}
-	    	
-	    }
-	    else {
-	    	xor=arr[m]^arr[m+k];
-	    }
-//	    xor=arr[m]^arr[m+k];
-	    System.out.println(xor);
+	    
 	    
     }
 	
