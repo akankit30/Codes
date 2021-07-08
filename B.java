@@ -10,14 +10,35 @@ public class B {
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    int t=fs.nextInt();
-	    while(t-->0) {
-	    	int n=fs.nextInt(),k=fs.nextInt();
-	    	int g[]=fs.readArray(n);
-	    	if(solve(n,g,k)) System.out.println("YES");
-	    	else System.out.println("NO");
-	    	
+	    int n=fs.nextInt();
+	    long arr[]=new long[n];
+	    for(int i=0;i<n;i++) arr[i]=fs.nextLong();
+	    long left[]=new long[n];
+	    long right[]=new long[n];
+	    left[0]=arr[0];
+	    for(int i=1;i<n;i++) {
+	    	if(arr[i]+left[i-1]<arr[i]) {
+	    		left[i]=arr[i];
+	    	}
+	    	else left[i]=left[i-1]+arr[i];
 	    }
+	    right[n-1]=arr[n-1];
+	    for(int i=n-2;i>=0;i--) {
+	    	if(right[i+1]+arr[i]<arr[i]) {
+	    		right[i]=arr[i];
+	    	}
+	    	else right[i]=arr[i]+right[i+1];
+	    }
+	    long max=0;
+	    for(int i=0;i<n;i++) {
+	    	long cur=arr[i]*arr[i];
+	    	long l=0;
+	    	if(i>0) l=Math.max(l, left[i-1]);
+	    	long r=0;
+	    	if(i<n-1) r=Math.max(r, right[i+1]);
+	    	max=Math.max(max, cur+l+r);
+	    }
+	    out.println(max);
 	    out.close();
 	}
 	static boolean solve(int n,int g[],int k) {

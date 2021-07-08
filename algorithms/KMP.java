@@ -7,6 +7,8 @@ public class KMP {
 	static List<Integer> list=new ArrayList<>();
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		KMPSearch("cdabcdabcdabcdab","aabaaaabddsaaa");
+		for(int ele: lps) System.out.print(ele+" ");
 
 	}
 	static void KMPSearch(String pat, String text) {

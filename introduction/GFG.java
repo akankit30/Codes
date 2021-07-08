@@ -2,47 +2,60 @@ package introduction;
 import java.io.*;
 import java.util.*;
 
+import javax.xml.crypto.dsig.SignatureMethod;
+
 public class GFG {
-	static long mat[][];
-	static int log[];
-	static int max,k;
+	
 	public static void main(String args[]) throws Exception {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-		max=Integer.parseInt(br.readLine());
-		String in[]=br.readLine().split("\\s+");
-		int [] arr=new int[max];
-		callog();
-		k=log[max];
+		
 		
 	}
-	static void callog() {
-		log=new int[max+1];
-		log[1]=0;
-		for(int i=2;i<=max;i++) {
-			log[i]=log[i/2]+1;
+//	static int check(int n) {
+//		System.out.println(n);
+//		int r
+//	}
+	static void floydWrshall(double dp[][],int next[][],int g[][]) {
+		int n=g.length;
+		for(int i=0;i<n;i++) {
+			for(int j=0;j<n;j++) {
+				dp[i][j]=g[i][j];
+				next[i][j]=j;
+			}
 		}
-	}
-	static void build(int arr[]) {
-		mat=new long[max][k+1];
-		for(int i=0;i<max;i++) mat[i][0]=arr[i];
-		for(int j=1;j<=k;j++) {
-			for(int i=0;i+(1<<j)-1<max;i++) {
-				mat[i][j]=Math.min(mat[i][j-1], mat[i+(1<<(j-1))][j-1]);
+		for(int k=0;k<n;k++) {
+			for(int i=0;i<n;i++) {
+				for(int j=0;j<n;j++) {
+					if(dp[i][j]>dp[i][k]+dp[k][j]) {
+						dp[i][j]=dp[i][k]+dp[k][j];
+						next[i][j]=next[i][k];
+					}
+				}
+			}
+		}
+		for(int k=0;k<n;k++) {
+			for(int i=0;i<n;i++) {
+				for(int j=0;j<n;j++) {
+					if(dp[i][j]>dp[i][k]+dp[k][j]) {
+						dp[i][j]=Double.NEGATIVE_INFINITY;
+						next[i][j]=-1;
+					}
+				}
 			}
 		}
 	}
-	
-	
-	static long sum(int l,int r) {
-		long ans=0;
-		for(int j=k;j>=0;j--) {
-			if(l+(1<<j)-1<=r) {
-				ans+=mat[l][j];
-				l+=(1<<j);
-			}
+	static List<Integer> construct(int st,int end,int next[][],double dp[][]){
+		List<Integer> path=new ArrayList<>();
+		if(dp[st][end]==Double.NEGATIVE_INFINITY) return null;
+		int at=st;
+		for( at=st;at!=end;at=next[at][end]) {
+			if(at==-1) return null;
+			path.add(at);
 		}
-		return ans;
+		if(next[at][end]==-1) return null;
+		return path;
 	}
+	
 }
 
 //1

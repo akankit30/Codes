@@ -9,7 +9,7 @@ public class FloydWarshall {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int n=9;
-		initial(n);
+		init(n);
 		
 	}
 	static void solve(int n) {
@@ -50,7 +50,7 @@ public class FloydWarshall {
 		if(next[at][end]==-1) return null;
 		return path;
 	}
-	static void initial(int n) {
+	static void init(int n) {
 		g=new double[n][n];
 		dp=new double[n][n];
 		next=new int[n][n];
