@@ -16,30 +16,31 @@ public class LCABinaryLifting {
 		// TODO Auto-generated method stub
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    int t=fs.nextInt();
-	    for(int time=1;time<=t;time++) {
-	    	out.println("Case "+time+":");
-	    	int n=fs.nextInt();
-	    	adj=new ArrayList<>();
-	    	for(int i=0;i<n;i++) {
-	    		int m=fs.nextInt();
-	    		adj.add(new ArrayList<>());
-	    		while(m-->0) {
-	    			adj.get(i).add(fs.nextInt()-1);
-	    		}
-	    	}
-	    	max=n;
-	    	log=(int)(Math.ceil(Math.log(max)/Math.log(2)));
-	    	up=new int[max][log+1];
-	    	timer=0;
-	    	tin=new int[max];
-	    	tout=new int[max];
-	    	dfs(0,0);
-	    	int q=fs.nextInt();
-	    	while(q-->0) {
-	    		out.println(query(fs.nextInt()-1,fs.nextInt()-1)+1);
-	    	}
-	    }
+	    
+    	int n=fs.nextInt();
+    	adj=new ArrayList<>();
+    	for(int i=0;i<n;i++)
+    	adj.add(new ArrayList<>());
+    	
+		int m=fs.nextInt();
+		while(m-->0) {
+			int u=fs.nextInt(), v=fs.nextInt();
+			adj.get(u).add(v);
+			adj.get(v).add(u);
+		}
+    	
+    	max=n;
+    	log=(int)(Math.ceil(Math.log(max)/Math.log(2)));
+    	up=new int[max][log+1];
+    	timer=0;
+    	tin=new int[max];
+    	tout=new int[max];
+    	dfs(0,0);
+    	int q=fs.nextInt();
+    	while(q-->0) {
+    		System.out.println(query(fs.nextInt(),fs.nextInt()));
+    	}
+	    
 	    out.close();
 	}
 

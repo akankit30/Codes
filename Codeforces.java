@@ -5,40 +5,31 @@ import java.io.PrintWriter;
 import java.util.*;
  
  
-
+ 
 public class Codeforces {
 	
 	static int mod=1000_000_007 ;
-	
+	static class Node{
+		int len, rec;
+		double amt;
+		String currency;
+		Node(int l, int r, double amt,String c){
+			len=l;
+			rec=r;
+			this.amt=amt;
+			currency=c;
+		}
+	}
+	static int ans=0;
+	static int N;
 	static long pow;
+	static String rup= "Rupees", euro = "Euro";
+	
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    int n=fs.nextInt();
-	    int arr[]=fs.readArray(n);
-	    int ans[]=new int[n];
-	    int dp[]=new int[n];
-	    Arrays.fill(dp, Integer.MAX_VALUE);
-	    for(int i=0;i<n;i++) {
-	    	int cur=arr[i];
-	    	int ind=find(dp,n,cur);
-	    	ans[i]=ind+1;
-	    	dp[ind]=cur;
-	    }
-	    for(int ele: ans) out.print(ele+" ");
-	    out.println();
-	    out.close();
 	    
     }
-	static int find(int arr[],int n, int tar) {
-		int l=0,r=n-1;
-		while(l<r) {
-			int mid=(l+r)/2;
-			if(arr[mid]<=tar) l=mid+1;
-			else r=mid;
-		}
-		return r;
-	}
 	static long pow(long a,long b) {
 		long res=1;
 		while(b!=0) {

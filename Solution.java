@@ -6,46 +6,98 @@ import java.util.*;
 
 
 public class Solution {
-	static int mod=1000_000_007;
-	static int max=(int) 1e5 + 5;
-	static List<Integer> div[]=new ArrayList[max];
-	static int ans[]=new int[max];
-	static int fake[]=new int[max];
+	static class Customer{
+		long c_id;
+		float inc, spend;
+		Customer(long id, float inc, float spend){
+			this.c_id =id;
+			this.inc=inc;
+			this.spend=spend;
+		}
+	}
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
-	    FastScanner fs=new FastScanner();
-	    for(int i=0;i<max;i++) {
-	    	div[i]=new ArrayList<>();
+//	    FastScanner fs=new FastScanner();
+	    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+	    int n=Integer.parseInt(br.readLine());
+	    List<Customer> list = new ArrayList<>();
+	    for(int i=0;i<n;i++) {
+	    	String arr[]=br.readLine().split("\\s+");
+	    	if(arr.length<3) continue;
+	    	if(arr[0]==null||arr[1]==null||arr[2]==null) continue;
+	    	long id =Long.parseLong(arr[0]);
+	    	float inc = Float.parseFloat(arr[1]), spn = Float.parseFloat(arr[2]);
+	    	if(inc<0||spn<0) continue;
+	    	list.add(new Customer(id,inc,spn));
 	    }
-	   
-	    for(int p = 2; p < max; ++p) {
-			for(int x = 2 * p; x < max; x += p) {
-				div[x].add(p);
-			}
-		}
-	    
-	    for(int i=2;i<max;i++) {
-	    	fake[i]=1;
-	    	for(int x:div[i]) {
-	    		fake[i]=Math.max(fake[i], 1+fake[(i/x) -1]);
+	    n=list.size();
+	    float dist[]=new float[n];
+	    int minind[]=new int[n];
+	    for(int i=0;i<n;i++) {
+	    	float min = Float.MAX_VALUE;
+	    	int cid=0;
+	    	for(int j=0;j<n;j++) {
+	    		if(j==i) continue;
+	    		float cur = dist(list.get(i),list.get(j));
+	    		if(cur<min) {
+	    			min = cur;
+	    			cid = j;
+	    		}
 	    	}
-	    }
-	    for(int i=3;i<max;i++) {
-	    	ans[i]=1;
-	    	for(int x:div[i]) {
-	    		if(x>=3)
-	    		ans[i]=Math.max(ans[i], 1+fake[i/x-1]);
-	    	}
-	    }
-	    int t=fs.nextInt();
-	    for(int cs=1;cs<=t;cs++) {
-	    	int n=fs.nextInt();
+	    	dist[i]=min;
+	    	minind[i]=cid;
 	    	
-	    	System.out.println("Case #"+cs+": "+ans[n]);
 	    }
-	  // out.close();
+	    int m=Integer.parseInt(br.readLine());
+	    List<Long> ans=new ArrayList<>();
+	    for(int i=0;i<m;i++) {
+	    	float min = Float.MAX_VALUE;
+	    	String arr[]=br.readLine().split("\\s+");
+	    	if(arr.length<3) continue;
+	    	if(arr[0]==null||arr[1]==null||arr[2]==null) continue;
+//	    	out.println("here");
+	    	long id =Long.parseLong(arr[0]);
+	    	float inc = Float.parseFloat(arr[1]), spn = Float.parseFloat(arr[2]);
+	    	if(inc<0||spn<0) continue;
+	    	list.add(new Customer(id,inc,spn));
+	    	Customer at = new Customer(id,inc,spn);
+	    	int cid=0;
+	    	for(int j=0;j<n;j++) {
+	    		if(j==i) continue;
+	    		float cur = dist(at,list.get(j));
+	    		if(cur<min) {
+	    			min = cur;
+	    			cid = j;
+	    		}
+	    	}
+	    	float d = min;
+	    	float D = dist[cid];
+	    	float ratio = d/D;
+	    	
+//	    	out.println(d+" "+D);
+	    	if(ratio<1.0) {
+//	    		out.print("here");
+	    		ans.add(at.c_id);
+	    	}
+	    }
+	    Collections.sort(ans);
+	    for(long id: ans) out.println(id);
+//	    out.print("here");
+	    out.close();
+	    
     }
-	
+	static float dist(Customer a, Customer b) {
+		float d= 0;
+		float diff=0;
+//		diff= (a.c_id-b.c_id);
+//		d+= diff*diff;
+		diff = a.inc - b.inc;
+		d+= diff*diff;
+		diff= a.spend-b.spend;
+		d+= diff*diff;
+		return (float)Math.sqrt(d);
+		
+	}
 	//  [30,20,10,40]  51,33,100,51]
 	static int gcd(int a,int b) {
 		if(b==0) return a;

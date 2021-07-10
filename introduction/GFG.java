@@ -7,53 +7,8 @@ import javax.xml.crypto.dsig.SignatureMethod;
 public class GFG {
 	
 	public static void main(String args[]) throws Exception {
-		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+
 		
-		
-	}
-//	static int check(int n) {
-//		System.out.println(n);
-//		int r
-//	}
-	static void floydWrshall(double dp[][],int next[][],int g[][]) {
-		int n=g.length;
-		for(int i=0;i<n;i++) {
-			for(int j=0;j<n;j++) {
-				dp[i][j]=g[i][j];
-				next[i][j]=j;
-			}
-		}
-		for(int k=0;k<n;k++) {
-			for(int i=0;i<n;i++) {
-				for(int j=0;j<n;j++) {
-					if(dp[i][j]>dp[i][k]+dp[k][j]) {
-						dp[i][j]=dp[i][k]+dp[k][j];
-						next[i][j]=next[i][k];
-					}
-				}
-			}
-		}
-		for(int k=0;k<n;k++) {
-			for(int i=0;i<n;i++) {
-				for(int j=0;j<n;j++) {
-					if(dp[i][j]>dp[i][k]+dp[k][j]) {
-						dp[i][j]=Double.NEGATIVE_INFINITY;
-						next[i][j]=-1;
-					}
-				}
-			}
-		}
-	}
-	static List<Integer> construct(int st,int end,int next[][],double dp[][]){
-		List<Integer> path=new ArrayList<>();
-		if(dp[st][end]==Double.NEGATIVE_INFINITY) return null;
-		int at=st;
-		for( at=st;at!=end;at=next[at][end]) {
-			if(at==-1) return null;
-			path.add(at);
-		}
-		if(next[at][end]==-1) return null;
-		return path;
 	}
 	
 }
