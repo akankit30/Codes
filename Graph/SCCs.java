@@ -26,21 +26,7 @@ public class SCCs {
 		initial(n);
 		addEdge(0, 1);
 	    addEdge(0, 3);
-	    addEdge(1, 2);
-	    addEdge(1, 4);
-	    addEdge(2, 0);
-	    addEdge(2, 6);
-	    addEdge(3, 2);
-	    addEdge(4, 5);
-	    addEdge(4, 6);
-	    addEdge(5, 6);
-	    addEdge(5, 7);
-	    addEdge(5, 8);
-	    addEdge(5, 9);
-	    addEdge(6, 4);
-	    addEdge(7, 9);
-	    addEdge(8, 9);
-	    addEdge(9, 8);
+	    
 	    List<List<Integer>> list=new ArrayList<>();
 	    TarjanSSCs(list);
 	    for(List<Integer> sub:list) {

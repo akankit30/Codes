@@ -6,110 +6,86 @@ import java.util.*;
 
 
 public class Solution {
-	static class Customer{
-		long c_id;
-		float inc, spend;
-		Customer(long id, float inc, float spend){
-			this.c_id =id;
-			this.inc=inc;
-			this.spend=spend;
-		}
-	}
+	static long tree[];
+	static int n;
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
-//	    FastScanner fs=new FastScanner();
-	    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-	    int n=Integer.parseInt(br.readLine());
-	    List<Customer> list = new ArrayList<>();
-	    for(int i=0;i<n;i++) {
-	    	String arr[]=br.readLine().split("\\s+");
-	    	if(arr.length<3) continue;
-	    	if(arr[0]==null||arr[1]==null||arr[2]==null) continue;
-	    	long id =Long.parseLong(arr[0]);
-	    	float inc = Float.parseFloat(arr[1]), spn = Float.parseFloat(arr[2]);
-	    	if(inc<0||spn<0) continue;
-	    	list.add(new Customer(id,inc,spn));
-	    }
-	    n=list.size();
-	    float dist[]=new float[n];
-	    int minind[]=new int[n];
-	    for(int i=0;i<n;i++) {
-	    	float min = Float.MAX_VALUE;
-	    	int cid=0;
-	    	for(int j=0;j<n;j++) {
-	    		if(j==i) continue;
-	    		float cur = dist(list.get(i),list.get(j));
-	    		if(cur<min) {
-	    			min = cur;
-	    			cid = j;
-	    		}
+	    FastScanner fs=new FastScanner();
+//	    int max=100000;
+	    int t = fs.nextInt(); 
+	    for(int time=1;time<=t;time++) {
+	    	Map<Long,Integer> map=new TreeMap<>();
+	    	int n=fs.nextInt();
+	    	long cuts = fs.nextLong();
+	    	for(int i=0;i<n;i++) {
+	    		long l=fs.nextLong(), r=fs.nextLong();
+	    		map.put(l+1,map.getOrDefault(l+1,0)+1);
+	    		map.put(r, map.getOrDefault(r, 0)-1);
 	    	}
-	    	dist[i]=min;
-	    	minind[i]=cid;
+	    	long arr[]=new long[n+1];
+	    	int j=0;
+	    	long prev=0;
+	    	for(Map.Entry<Long, Integer> e: map.entrySet()) {
+	    		long cur = e.getKey();
+//	    		System.out.println(cur);
+	    		arr[j]+=(cur - prev);
+	    		prev=cur;
+	    		j+=e.getValue();
+	    	}
+	    	long ans=n;
+	    	for(int i=n;i>0;i--) {
+	    		ans += Math.min(cuts, arr[i])*(long)i;
+	    		cuts-=Math.min(cuts, arr[i]);
+	    	}
+	    	
+	    	out.println("Case #" + time + ": "+ans );
 	    	
 	    }
-	    int m=Integer.parseInt(br.readLine());
-	    List<Long> ans=new ArrayList<>();
-	    for(int i=0;i<m;i++) {
-	    	float min = Float.MAX_VALUE;
-	    	String arr[]=br.readLine().split("\\s+");
-	    	if(arr.length<3) continue;
-	    	if(arr[0]==null||arr[1]==null||arr[2]==null) continue;
-//	    	out.println("here");
-	    	long id =Long.parseLong(arr[0]);
-	    	float inc = Float.parseFloat(arr[1]), spn = Float.parseFloat(arr[2]);
-	    	if(inc<0||spn<0) continue;
-	    	list.add(new Customer(id,inc,spn));
-	    	Customer at = new Customer(id,inc,spn);
-	    	int cid=0;
-	    	for(int j=0;j<n;j++) {
-	    		if(j==i) continue;
-	    		float cur = dist(at,list.get(j));
-	    		if(cur<min) {
-	    			min = cur;
-	    			cid = j;
-	    		}
-	    	}
-	    	float d = min;
-	    	float D = dist[cid];
-	    	float ratio = d/D;
-	    	
-//	    	out.println(d+" "+D);
-	    	if(ratio<1.0) {
-//	    		out.print("here");
-	    		ans.add(at.c_id);
-	    	}
-	    }
-	    Collections.sort(ans);
-	    for(long id: ans) out.println(id);
-//	    out.print("here");
 	    out.close();
 	    
     }
-	static float dist(Customer a, Customer b) {
-		float d= 0;
-		float diff=0;
-//		diff= (a.c_id-b.c_id);
-//		d+= diff*diff;
-		diff = a.inc - b.inc;
-		d+= diff*diff;
-		diff= a.spend-b.spend;
-		d+= diff*diff;
-		return (float)Math.sqrt(d);
+	static void build(int arr[]) {
+		while(Integer.bitCount(n)!=1) n++;
+		
+		tree=new long[n*2];
+		
+		for(int i=0;i<arr.length;i++) {
+			tree[n+i]=arr[i];
+		}
+		for(int i=n-1;i>=1;i--) {
+			tree[i]=tree[2*i]+tree[2*i+1];
+		}
 		
 	}
-	//  [30,20,10,40]  51,33,100,51]
+
+	static long sum_q(int node,int node_low,int node_high,int q_low,int q_high) {
+		if(node_low>=q_low&&node_high<=q_high) {
+			return tree[node];
+		}
+		if(node_high<q_low||node_low>q_high) return 0;
+		
+		int mid= (node_low+node_high)/2;
+		
+		return sum_q( 2*node,node_low,mid,q_low,q_high)+sum_q( 2*node+1,mid+1,node_high,q_low,q_high);
+	}
+
+	static void update_q(int i,int v) {
+		tree[n+i]=v;
+		for(int j=(n+i)/2;j>=1;j/=2) {
+			tree[j]=tree[j*2]+tree[j*2+1];
+		}
+	}
 	static int gcd(int a,int b) {
 		if(b==0) return a;
 		return gcd(b,a%b);
 	}
-    static void sort(int[] a) {
+    static void sort(long[] a) {
 		//suffle
 		int n=a.length;
 		Random r=new Random();
 		for (int i=0; i<a.length; i++) {
 			int oi=r.nextInt(n);
-			int temp=a[i];
+			long temp=a[i];
 			a[i]=a[oi];
 			a[oi]=temp;
 		}

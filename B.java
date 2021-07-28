@@ -2,98 +2,59 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
 import java.util.*;
 
+
 public class B {
-	static class Node{
-		int freq[]=new int[10];
-		int dur[]=new int[10];
-		String [] recent=new String[10];
-		Node() {}
-	}
+	
 	static int mod =1000000007; 
+	
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-	    String a= "2020-02-03 04:22:25";
-	    String b="2020-02-03 04:20:25";
-	    System.out.println(diff(a,b));
-	    int m=Integer.parseInt(br.readLine());
-	    Map<String,Node> map=new HashMap<>();
-	    Map<String,Integer> pind=new HashMap<>();
-	    pind.put("offers",0);
-	    pind.put("rewards", 1);
-	    pind.put("dispute", 1);
-	    pind.put("flights", 1);
-	    pind.put("referral", 1);
-	    pind.put("payment", 1);
-	    pind.put("hotels", 1);
-	    pind.put("statement", 1);
-	    pind.put("change_pin", 1);
-	    pind.put("transaction", 1);
-	    
-	    for(int i=0;i<m;i++) {
-	    	String[] in =br.readLine().split(",");
-	    	String cid= in[0], page=in[1], st=in[2],end=in[3];
-	    	if(!map.containsKey(cid)) map.put(cid, new Node());
-	    	
-	    }
+	    int te=fs.nextInt();
+	   outer: while(te-->0) {
+		   int n=fs.nextInt(), k=fs.nextInt();
+		   int arr[]=fs.readArray(n);
+		   Map<Integer,List<Integer>> map=new HashMap<>();
+		   for(int i=0;i<n;i++) {
+			   if(!map.containsKey(arr[i])) map.put(arr[i], new ArrayList<>());
+			   map.get(arr[i]).add(i);
+		   }
+		   int res[]=new int[n];
+		   int curclr=1;
+		   for(Map.Entry<Integer, List<Integer>> e:map.entrySet()) {
+			   List<Integer> temp=e.getValue();
+			   for(int i=0;i<Math.min(k,temp.size());i++) {
+				   res[temp.get(i)]=curclr;
+				   curclr++;
+				   if(curclr==k+1) curclr=1;
+			   }
+		   }
+		   Set<Integer> set=new HashSet<>();
+		   for(int i=1;i<curclr;i++) set.add(i);
+		   for(int i=0;i<n;i++) {
+			   if(set.contains(res[i])) {
+				   set.remove(res[i]);
+				   res[i]=0;  
+			   }
+			   out.print(res[i]+" ");
+		   }
+		   out.println();
+		   
+	   }
 	    out.close();
 	}
-	static int diff(String a,String b) {
-		LocalDateTime date1 = LocalDateTime.of(Integer.parseInt(a.substring(0,4)),
-				Integer.parseInt(a.substring(5,7)),
-				Integer.parseInt(a.substring(8,10)),
-				Integer.parseInt(a.substring(11,13)),
-				Integer.parseInt(a.substring(14,16)),
-				Integer.parseInt(a.substring(17)));
-		
-		LocalDateTime date2 = LocalDateTime.of(Integer.parseInt(b.substring(0,4)),
-				Integer.parseInt(b.substring(5,7)),
-				Integer.parseInt(b.substring(8,10)),
-				Integer.parseInt(b.substring(11,13)),
-				Integer.parseInt(b.substring(14,16)),
-				Integer.parseInt(b.substring(17)));
-		int diff = date1.compareTo(date2);
-		int ad  = date1.getNano();
-		int bd= date2.getNano();
-        return ad-bd;
+	static void rev(char arr[]) {
+		int i=0,j=arr.length-1;
+		while(i<j) {
+			char temp=arr[i];
+			arr[i]=arr[j];
+			arr[j]=temp;
+			i++; j--;
+		}
 	}
-	// 0123456789101112131415161718
-	// yyyy-mm-dd  H H - M M : s s
-	static int compare(String a,String b) {
-		
-		LocalDateTime date1 = LocalDateTime.of(Integer.parseInt(a.substring(0,5)),
-				Integer.parseInt(a.substring(5,7)),
-				Integer.parseInt(a.substring(8,10)),
-				Integer.parseInt(a.substring(11,13)),
-				Integer.parseInt(a.substring(14,16)),
-				Integer.parseInt(a.substring(17)));
-		
-		LocalDateTime date2 = LocalDateTime.of(Integer.parseInt(b.substring(0,5)),
-				Integer.parseInt(b.substring(5,7)),
-				Integer.parseInt(b.substring(8,10)),
-				Integer.parseInt(b.substring(11,13)),
-				Integer.parseInt(b.substring(14,16)),
-				Integer.parseInt(b.substring(17)));
-
-        // isAfter() method
-        if(date1.isAfter(date2)) {
-            return +1;
-        }
-
-        // isBefore() method
-        if(date1.isBefore(date2)) {
-            return -1;
-        }
-
-        // isEqual() method
-        return 0;
-        // compareTo() method
-        
-	}
+	
 	static long gcd(long  a,long  b) {
 		if(b==0) return a;
 		return gcd(b,a%b);

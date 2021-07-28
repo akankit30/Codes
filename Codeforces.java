@@ -5,31 +5,41 @@ import java.io.PrintWriter;
 import java.util.*;
  
  
- 
 public class Codeforces {
 	
-	static int mod=1000_000_007 ;
-	static class Node{
-		int len, rec;
-		double amt;
-		String currency;
-		Node(int l, int r, double amt,String c){
-			len=l;
-			rec=r;
-			this.amt=amt;
-			currency=c;
-		}
-	}
-	static int ans=0;
-	static int N;
-	static long pow;
-	static String rup= "Rupees", euro = "Euro";
+	static int mod =1000000007; 
 	
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    
-    }
+	    int t=fs.nextInt();
+	    while(t-->0) {}
+	    out.close();
+	}
+	
+	static long gcd(long  a,long  b) {
+		if(b==0) return a;
+		return gcd(b,a%b);
+	}
+	static long nck(int n,int k) {
+		if(k>n) return 0;
+		long res=1;
+		res*=fact(n);
+		res%=mod;
+		res*=modInv(fact(k));
+		res%=mod;
+		res*=modInv(fact(n-k)); 
+		res%=mod;
+		return res;
+	}
+	static long fact(long n) {
+		long res=1;
+		for(int i=2;i<=n;i++) {
+			res*=i;
+			res%=mod;
+		}
+		return res;
+	}
 	static long pow(long a,long b) {
 		long res=1;
 		while(b!=0) {
@@ -43,35 +53,17 @@ public class Codeforces {
 		}
 		return res;
 	}
-	static long lcm(long a,long b) {
-		long ans=a*b;
-		while(b!=0) {
-			long temp= b;
-			b=a%b;
-			a=temp;
-		}
-		return ans/a;
+	static long modInv(long n) {
+		return pow(n,mod-2);
 	}
 	
-	static long fact(long n) {
-		long res=1;
-		for(int i=2;i<=n;i++) {
-			res*=i;
-			res%=mod;
-		}
-		return res;
-	}
-	static int gcd(int  a,int  b) {
-		if(b==0) return a;
-		return gcd(b,a%b);
-	}
-    static void sort(long[] a) {
+	static void sort(int[] a) {
 		//suffle
 		int n=a.length;
 		Random r=new Random();
 		for (int i=0; i<a.length; i++) {
 			int oi=r.nextInt(n);
-			long temp=a[i];
+			int temp=a[i];
 			a[i]=a[oi];
 			a[oi]=temp;
 		}
@@ -79,6 +71,7 @@ public class Codeforces {
 		//then sort
 		Arrays.sort(a);
 	}
+	
 	// Use this to input code since it is faster than a Scanner
 	static class FastScanner {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));

@@ -10,11 +10,12 @@ public class SparseTable {
 		max=100000; //size of array;
 		callog();
 		k=log[max];
-		mat=new int[max][k+1];
+		
 		
 
 	}
 	static void build(int arr[]) {
+		mat=new int[max][k+1];
 		for(int i=0;i<arr.length;i++) {
 			mat[i][0]=arr[i];
 		}

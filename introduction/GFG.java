@@ -4,12 +4,16 @@ import java.util.*;
 
 import javax.xml.crypto.dsig.SignatureMethod;
 
+
 public class GFG {
 	
+	static int mod = 1000000007;
+	
 	public static void main(String args[]) throws Exception {
-
 		
-	}
+	     System.out.println(("a".compareTo("b")));
+		
+	}	
 	
 }
 
