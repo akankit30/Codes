@@ -12,38 +12,27 @@ public class B {
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    int te=fs.nextInt();
-	   outer: while(te-->0) {
-		   int n=fs.nextInt(), k=fs.nextInt();
-		   int arr[]=fs.readArray(n);
-		   Map<Integer,List<Integer>> map=new HashMap<>();
-		   for(int i=0;i<n;i++) {
-			   if(!map.containsKey(arr[i])) map.put(arr[i], new ArrayList<>());
-			   map.get(arr[i]).add(i);
-		   }
-		   int res[]=new int[n];
-		   int curclr=1;
-		   for(Map.Entry<Integer, List<Integer>> e:map.entrySet()) {
-			   List<Integer> temp=e.getValue();
-			   for(int i=0;i<Math.min(k,temp.size());i++) {
-				   res[temp.get(i)]=curclr;
-				   curclr++;
-				   if(curclr==k+1) curclr=1;
-			   }
-		   }
-		   Set<Integer> set=new HashSet<>();
-		   for(int i=1;i<curclr;i++) set.add(i);
-		   for(int i=0;i<n;i++) {
-			   if(set.contains(res[i])) {
-				   set.remove(res[i]);
-				   res[i]=0;  
-			   }
-			   out.print(res[i]+" ");
-		   }
-		   out.println();
-		   
-	   }
+//	    long a=fs.nextLong(),b=fs.nextLong();
+//	    System.out.println(find(4,10));
+	    for(int i=1;i<=100;i++) {
+	    	System.out.println(i+" "+find(1,i));
+	    }
 	    out.close();
+	}
+	public static int find(long a,long b) {
+		int ans=0;
+	    for(long i=a+1;i<=b;i++) {
+	    	ans+=count(i-1,i);
+	    }
+	   return ans;
+	}
+	public static int count(long a,long b) {
+		int ans=0;
+		a=a^b;
+		for(int j=0;j<60;j++) {
+			if((a&(1<<j))!=0) ans++;
+		}
+		return ans;
 	}
 	static void rev(char arr[]) {
 		int i=0,j=arr.length-1;

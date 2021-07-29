@@ -8,12 +8,48 @@ import java.util.*;
 public class Codeforces {
 	
 	static int mod =1000000007; 
-	
+	static int cnt[][]=new int[1002][100005];
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-	    int t=fs.nextInt();
-	    while(t-->0) {}
+	    int n=fs.nextInt();
+	    int arr[]=fs.readArray(n);
+	    for(int i=n-1;i>=0;i--) {
+	    	int val=arr[i];
+	    	for(int j=0;j<100005;j++) {
+	    		cnt[i][j]=cnt[i+1][j];
+	    	}
+	    	cnt[i][val]++;
+	    }
+	    int next[]=new int[100005];
+	    int last[]=new int[100005];
+	    Arrays.fill(last,n);
+	    for(int i=n-1;i>=0;i--) {
+	    	int val=arr[i];
+	    	next[i]=last[val+1];
+	    	last[val]=i;
+	    }
+//	    for(int i=0;i<n;i++) System.out.print(next[i]+" ");
+//	    System.out.println();
+	    long ans=0;
+	    boolean used[]=new boolean[100005];
+	    for(int i=0;i<n;i++) {
+	    	int cur=arr[i];
+	    	int f=next[cur];
+	    	if(!used[cur]) {
+	    		long res=cnt[i][cur];
+	    		for(int j=0;j<100005;j++) {
+	    			if(j==cur) continue;
+	    			res*=(cnt[f][j]+1);	
+	    			res%=mod;
+	    		}
+//	    		System.out.println(res);
+	    		used[cur]=true;
+	    		ans+=res;
+		    	ans%=mod;
+	    	}
+	    }
+	    System.out.println(ans);
 	    out.close();
 	}
 	

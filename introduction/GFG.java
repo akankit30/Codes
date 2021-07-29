@@ -1,20 +1,87 @@
 package introduction;
 import java.io.*;
-import java.util.*;
+import java.lang.Math;
+ 
+class GFG{
 
-import javax.xml.crypto.dsig.SignatureMethod;
+static long binpow(long a, long b)
+{
+    long res = 1;
+ 
+    while (b > 0)
+    {
+        if (b % 2 == 1)
+            res = res * a;
+        a = a * a;
+        b /= 2;
+    }
+    return res;
+}
 
+static long find(long x)
+{
+    if (x == 0)
+        return 0;
+         
+    long p = (int)(Math.log(x) / Math.log(2));
+    return binpow(2, p + 1) - 1;
+}
 
-public class GFG {
-	
-	static int mod = 1000000007;
-	
-	public static void main(String args[]) throws Exception {
-		
-	     System.out.println(("a".compareTo("b")));
-		
-	}	
-	
+static String getBinary(long n)
+{
+
+    String ans = "";
+
+    while (n > 0)
+    {
+        long dig = n % 2;
+        ans += dig;
+        n /= 2;
+    }
+
+    return ans;
+}
+
+static long totalCountDifference(long n)
+{
+    String ans = getBinary(n);
+    long req = 0;
+
+    for(int i = 0; i < ans.length(); i++)
+    {
+       if (ans.charAt(i) == '1')
+       {
+           req += find(binpow(2, i));
+       }
+    }
+    return req;
+}
+
+public static void main (String[] args)
+{
+    long a=4 ;
+    long b=100000000;
+    long ans=totalCountDifference(b)-totalCountDifference(a);
+//    long o=check(a,b);
+    long o=0;
+    System.out.println(ans+" "+o);
+}
+static long check(long a,long b) {
+	long cnt=0;
+	for(long i=a+1;i<=b;i++) {
+		cnt+=dist(i-1,i);
+	}
+	return cnt;
+}
+static long dist(long x,long y) {
+	long cnt=0;
+	while(x!=0||y!=0) {
+		cnt+=((x%2)!=(y%2)) ? 1:0;
+		x/=2;
+		y/=2;
+	}
+	return cnt;
+}
 }
 
 //1
