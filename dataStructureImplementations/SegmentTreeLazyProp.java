@@ -30,10 +30,13 @@ public class SegmentTreeLazyProp {
 		int max() {
 			return max+toProp;
 		}
-		
+		long sum() {
+			return sum+toProp;
+		}
 		void recalc() {
 			if (leftmost==rightmost) return;
 			max=Math.max(lChild.max(), rChild.max());
+			sum=lChild.sum()+rChild.sum();
 		}
 		void prop() {
 			if (leftmost!=rightmost) {
@@ -68,13 +71,15 @@ public class SegmentTreeLazyProp {
 				sum=val;
 				return;
 			}
-			if(index<=leftmost) lChild.pointUpdate(index,val);
+			int mid=(leftmost+rightmost)/2;
+			if(index<=mid) lChild.pointUpdate(index,val);
 			else rChild.pointUpdate(index,val);
 			recalc();
 		}
 		long rangeSum(int l,int r) {
 			if(l>rightmost||r<leftmost) return 0;
 			if(l<=leftmost&&r>=rightmost) return sum;
+			prop();
 			return lChild.rangeSum(l, r)+rChild.rangeSum(l, r);
 		}
 	}

@@ -1,11 +1,58 @@
 package dataStructureImplementations;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 public class SegmentTree {
 
 	static long tree[];
 	static int n;
+	static class FastScanner {
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st=new StringTokenizer("");
+		String next() {
+			while (!st.hasMoreTokens())
+				try {
+					st=new StringTokenizer(br.readLine());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			return st.nextToken();
+		}
+		
+		int nextInt() {
+			return Integer.parseInt(next());
+		}
+		long[] lreadArray(int n) {
+			long a[]=new long[n];
+			for(int i=0;i<n;i++) a[i]=nextLong();
+			return a;
+		}
+		int[] readArray(int n) {
+			int[] a=new int[n];
+			for (int i=0; i<n; i++) a[i]=nextInt();
+			return a;
+		}
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		FastScanner fs=new FastScanner();
+		n=fs.nextInt();
+		int arr[]=new int[n];
+//		int arr[]=fs.readArray(n);
+		build(arr);
+		for(long ele:tree) {
+			System.out.print(ele+" ");
+		}
+		System.out.println();
+		System.out.println(sum_q(1,1,n,1,n));
+		update_q(0,9);
+		System.out.println(sum_q(1,1,n,1,n));
 		
 	}
 	static void build(int arr[]) {

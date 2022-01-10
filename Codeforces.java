@@ -2,57 +2,121 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+//import java.text.DecimalFormat;
 import java.util.*;
- 
- 
+
+
 public class Codeforces {
-	
-	static int mod =1000000007; 
-	static int cnt[][]=new int[1002][100005];
+	static int mod= 1000000007;
+	static int rank[], par[];
+	static List<Integer> adj[];
+	static class Node{
+		int u,v,val;
+		Node(int u,int v,int val){
+			this.v=v;
+			this.u=u;
+			this.val=val;
+		}
+	}
+	static int temp=0;
+	static Map<Integer,HashMap<Integer,Integer>> map;
+	static int vst[];
+	static int timer=1;
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
-	    FastScanner fs=new FastScanner();
-	    int n=fs.nextInt();
-	    int arr[]=fs.readArray(n);
-	    for(int i=n-1;i>=0;i--) {
-	    	int val=arr[i];
-	    	for(int j=0;j<100005;j++) {
-	    		cnt[i][j]=cnt[i+1][j];
-	    	}
-	    	cnt[i][val]++;
-	    }
-	    int next[]=new int[100005];
-	    int last[]=new int[100005];
-	    Arrays.fill(last,n);
-	    for(int i=n-1;i>=0;i--) {
-	    	int val=arr[i];
-	    	next[i]=last[val+1];
-	    	last[val]=i;
-	    }
-//	    for(int i=0;i<n;i++) System.out.print(next[i]+" ");
-//	    System.out.println();
-	    long ans=0;
-	    boolean used[]=new boolean[100005];
-	    for(int i=0;i<n;i++) {
-	    	int cur=arr[i];
-	    	int f=next[cur];
-	    	if(!used[cur]) {
-	    		long res=cnt[i][cur];
-	    		for(int j=0;j<100005;j++) {
-	    			if(j==cur) continue;
-	    			res*=(cnt[f][j]+1);	
-	    			res%=mod;
-	    		}
-//	    		System.out.println(res);
-	    		used[cur]=true;
-	    		ans+=res;
-		    	ans%=mod;
-	    	}
-	    }
-	    System.out.println(ans);
-	    out.close();
+		FastScanner fs=new FastScanner();
+		int t=fs.nextInt();
+		
+		outer:while(t-->0) {
+			int n=fs.nextInt(), m=fs.nextInt();
+			adj=new ArrayList[n];
+			vst=new int[n];
+			
+			for(int i=0;i<n;++i) adj[i]=new ArrayList<>();
+			map=new HashMap<>();
+//			List<Integer> list=new ArrayList<>();
+			while(m-->0) {
+				int x=fs.nextInt()-1, y=fs.nextInt()-1,w=fs.nextInt();
+				adj[x].add(y);
+				adj[y].add(x);
+				if(!map.containsKey(x)) map.put(x, new HashMap<>());
+				if(!map.containsKey(y)) map.put(y, new HashMap<>());
+				map.get(x).put(y, w);
+				map.get(y).put(x, w);
+			}
+			int l=1,r=1000000000;
+			while(l<r) {
+				int mid=(l+r)/2;
+				if(check(n,mid)) {
+					r=mid;
+				}
+				else l=mid+1;
+			}
+			if(check(n,l-1))
+				l=l--;
+			out.println(l);
+			
+			
+			
+//			System.out.println(check(n,8));
+		}
+		out.close();
+		
+	}
+	static boolean check(int n,int mid) {
+		timer++;
+		dfs(0,-1,mid);
+		temp=0;
+		for(int i=0;i<n;i++) if(vst[i]!=timer) return false;
+		return true;
+	}
+	static void dfs(int cur,int p,int ans) {
+		int w=0;
+		if(p!=-1) {
+			w=map.get(cur).get(p);
+		}
+		if( (temp|w) > ans ) return;
+		
+		if(vst[cur]==timer) return;
+		temp|=w;
+		vst[cur]=timer;
+		for(int c:adj[cur]) {
+			if(c!=p) dfs(c,cur,ans);
+		}
+		return ;
+	}
+	static void union(int x,int y) {
+		int px=find(x), py=find(y);
+		if(rank[px]<rank[py]) {
+			par[px]=py;
+		}
+		else if(rank[px]>rank[py]) {
+			par[py]=px;
+		}
+		else {
+			par[px]=py;
+			rank[py]++;
+		}
+	}
+	static int find(int x) {
+		if(par[x]==-1) return x;
+		return par[x]=find(par[x]);
 	}
 	
+	static long pow(long a,long b) {
+		if(b<0) return 1;
+		long res=1;
+		while(b!=0) {
+			if((b&1)!=0) {
+				res*=a;
+				res%=mod;
+			}
+			a*=a;
+			a%=mod;
+			b=b>>1;
+		}
+		return res;
+	}
 	static long gcd(long  a,long  b) {
 		if(b==0) return a;
 		return gcd(b,a%b);
@@ -69,6 +133,7 @@ public class Codeforces {
 		return res;
 	}
 	static long fact(long n) {
+//		return fact[(int)n];
 		long res=1;
 		for(int i=2;i<=n;i++) {
 			res*=i;
@@ -76,19 +141,7 @@ public class Codeforces {
 		}
 		return res;
 	}
-	static long pow(long a,long b) {
-		long res=1;
-		while(b!=0) {
-			if((b&1)!=0) {
-				res*=a;
-				res%=mod;
-			}
-			a*=a;
-			a%=mod;
-			b=b>>1;
-		}
-		return res;
-	}
+	
 	static long modInv(long n) {
 		return pow(n,mod-2);
 	}
@@ -124,6 +177,11 @@ public class Codeforces {
 		
 		int nextInt() {
 			return Integer.parseInt(next());
+		}
+		long[] lreadArray(int n) {
+			long a[]=new long[n];
+			for(int i=0;i<n;i++) a[i]=nextLong();
+			return a;
 		}
 		int[] readArray(int n) {
 			int[] a=new int[n];

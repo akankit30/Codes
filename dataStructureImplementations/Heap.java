@@ -45,7 +45,7 @@ public class Heap {
 	}
 	private void ensureExtraCapacity() {
 		if(size==capacity) {
-			Arrays.copyOf(items, capacity*2);
+			items = Arrays.copyOf(items, capacity*2);
 			capacity=capacity*2;
 		}
 	}

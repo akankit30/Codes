@@ -1,5 +1,7 @@
 package dataStructureImplementations;
 
+import java.util.List;
+
 public class Union {
 	static class Subset{
 		int rank,parent;
@@ -12,6 +14,23 @@ public class Union {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	
+	}
+	static int find(List<String> list) {
+		int n=list.size();
+		Subset set[]=new Subset[n];
+		init(set,n);
+		for(int i=0;i<n;i++) {
+			for(int j=0;j<n;j++) {
+				if(list.get(i).charAt(j)=='1') {
+					union(set,i,j);
+				}
+			}
+		}
+		int ans=0;
+		for(int i=0;i<n;i++) {
+			if(set[i].parent==i) ans++;
+		}
+		return ans;
 	}
 	static void init(Subset[]set ,int n) {
 		set=new Subset[n];

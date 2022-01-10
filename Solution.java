@@ -4,88 +4,130 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
-
+ 
+ 
 public class Solution {
-	static long tree[];
-	static int n;
+	
+	static int mod=1000000007 ;
+	
 	public static void main(String[] args) throws Exception {
+		// TODO Auto-generated method stub
 		PrintWriter out=new PrintWriter(System.out);
 	    FastScanner fs=new FastScanner();
-//	    int max=100000;
-	    int t = fs.nextInt(); 
-	    for(int time=1;time<=t;time++) {
-	    	Map<Long,Integer> map=new TreeMap<>();
-	    	int n=fs.nextInt();
-	    	long cuts = fs.nextLong();
-	    	for(int i=0;i<n;i++) {
-	    		long l=fs.nextLong(), r=fs.nextLong();
-	    		map.put(l+1,map.getOrDefault(l+1,0)+1);
-	    		map.put(r, map.getOrDefault(r, 0)-1);
-	    	}
-	    	long arr[]=new long[n+1];
-	    	int j=0;
-	    	long prev=0;
-	    	for(Map.Entry<Long, Integer> e: map.entrySet()) {
-	    		long cur = e.getKey();
-//	    		System.out.println(cur);
-	    		arr[j]+=(cur - prev);
-	    		prev=cur;
-	    		j+=e.getValue();
-	    	}
-	    	long ans=n;
-	    	for(int i=n;i>0;i--) {
-	    		ans += Math.min(cuts, arr[i])*(long)i;
-	    		cuts-=Math.min(cuts, arr[i]);
-	    	}
-	    	
-	    	out.println("Case #" + time + ": "+ans );
-	    	
-	    }
-	    out.close();
 	    
-    }
-	static void build(int arr[]) {
-		while(Integer.bitCount(n)!=1) n++;
-		
-		tree=new long[n*2];
-		
-		for(int i=0;i<arr.length;i++) {
-			tree[n+i]=arr[i];
-		}
-		for(int i=n-1;i>=1;i--) {
-			tree[i]=tree[2*i]+tree[2*i+1];
-		}
-		
+	    int t=fs.nextInt();
+	    outer:for(int time=1;time<=t;time++) {
+	    	
+	    	long ans=0;
+	    	
+	    	int n=fs.nextInt();
+	    	char arr[]=fs.next().toCharArray();
+	    	
+	    	/*
+	    	 *  U = Uncolored
+				R = Red       1
+				Y = Yellow    2
+				B = Blue      3
+				O = Orange    1 2 
+				P = Purple    1 3 
+				G = Green     2 3
+				A = Gray      1 2 3
+	    	 */
+	    	boolean f=false;
+	    	for(char c:arr) {
+	    		boolean isp=false;
+	    		if(c=='R'||c=='O'||c=='P'||c=='A') {
+	    			isp=true;
+	    			
+	    		}
+	    		if(!isp) f=false;
+	    		
+	    		if(!f&&isp) ans++;
+	    		if(isp) f=true;
+	
+	    	}
+	    	f=false;
+	    	for(char c:arr) {
+	    		boolean isp=false;
+	    		if(c=='Y'||c=='O'||c=='A'||c=='G') {
+	    			isp=true;
+	    			
+	    		}
+	    		if(!isp) f=false;
+	    		
+	    		if(!f&&isp) ans++;
+	    		if(isp) f=true;
+	
+	    	}
+	    	f=false;
+	    	for(char c:arr) {
+	    		boolean isp=false;
+	    		if(c=='B'||c=='A'||c=='P'||c=='G') {
+	    			isp=true;
+	    			
+	    		}
+	    		if(!isp) f=false;
+	    		
+	    		if(!f&&isp) ans++;
+	    		if(isp) f=true;
+	
+	    	}
+	    	out.println("Case #" + time + ": "+ans);
+	    }
+	    
+	    
+	    out.close();
 	}
-
-	static long sum_q(int node,int node_low,int node_high,int q_low,int q_high) {
-		if(node_low>=q_low&&node_high<=q_high) {
-			return tree[node];
+	
+	static long pow(long a,long b) {
+		if(b<0) return 1;
+		long res=1;
+		while(b!=0) {
+			if((b&1)!=0) {
+				res*=a;
+				res%=mod;
+			}
+			a*=a;
+			a%=mod;
+			b=b>>1;
 		}
-		if(node_high<q_low||node_low>q_high) return 0;
-		
-		int mid= (node_low+node_high)/2;
-		
-		return sum_q( 2*node,node_low,mid,q_low,q_high)+sum_q( 2*node+1,mid+1,node_high,q_low,q_high);
+		return res;
 	}
-
-	static void update_q(int i,int v) {
-		tree[n+i]=v;
-		for(int j=(n+i)/2;j>=1;j/=2) {
-			tree[j]=tree[j*2]+tree[j*2+1];
-		}
-	}
-	static int gcd(int a,int b) {
+	static long gcd(long  a,long  b) {
 		if(b==0) return a;
 		return gcd(b,a%b);
 	}
-    static void sort(long[] a) {
+	static long nck(int n,int k) {
+		if(k>n) return 0;
+		long res=1;
+		res*=fact(n);
+		res%=mod;
+		res*=modInv(fact(k));
+		res%=mod;
+		res*=modInv(fact(n-k)); 
+		res%=mod;
+		return res;
+	}
+	static long fact(long n) {
+		long res=1;
+		for(int i=2;i<=n;i++) {
+			res*=i;
+			res%=mod;
+		}
+		return res;
+	}
+	
+	static long modInv(long n) {
+		return pow(n,mod-2);
+	}
+	
+	static void sort(int[] a) {
 		//suffle
 		int n=a.length;
 		Random r=new Random();
 		for (int i=0; i<a.length; i++) {
 			int oi=r.nextInt(n);
-			long temp=a[i];
+			int temp=a[i];
 			a[i]=a[oi];
 			a[oi]=temp;
 		}
@@ -93,6 +135,7 @@ public class Solution {
 		//then sort
 		Arrays.sort(a);
 	}
+	
 	// Use this to input code since it is faster than a Scanner
 	static class FastScanner {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
@@ -109,6 +152,11 @@ public class Solution {
 		
 		int nextInt() {
 			return Integer.parseInt(next());
+		}
+		long[] lreadArray(int n) {
+			long a[]=new long[n];
+			for(int i=0;i<n;i++) a[i]=nextLong();
+			return a;
 		}
 		int[] readArray(int n) {
 			int[] a=new int[n];

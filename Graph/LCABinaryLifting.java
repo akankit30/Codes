@@ -29,13 +29,7 @@ public class LCABinaryLifting {
 			adj.get(v).add(u);
 		}
     	
-    	max=n;
-    	log=(int)(Math.ceil(Math.log(max)/Math.log(2)));
-    	up=new int[max][log+1];
-    	timer=0;
-    	tin=new int[max];
-    	tout=new int[max];
-    	dfs(0,0);
+    	
     	int q=fs.nextInt();
     	while(q-->0) {
     		System.out.println(query(fs.nextInt(),fs.nextInt()));
@@ -43,7 +37,15 @@ public class LCABinaryLifting {
 	    
 	    out.close();
 	}
-
+	static void build(int n) {
+		max=n+1;
+    	log=(int)(Math.ceil(Math.log(max)/Math.log(2)));
+    	up=new int[max][log+1];
+    	timer=0;
+    	tin=new int[max];
+    	tout=new int[max];
+    	dfs(1,1);
+	}
 	static void dfs(int a,int p) {
 		tin[a]=++timer;
 		up[a][0]=p;

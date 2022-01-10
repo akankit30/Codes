@@ -7,10 +7,10 @@ public class SparseTable {
 	static int k;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		max=100000; //size of array;
+		max=1000000; //size of array;
 		callog();
 		k=log[max];
-		
+		System.out.println(log[1000000]);
 		
 
 	}

@@ -10,7 +10,6 @@ public class ZFunction {
 	
 	}
 	static int[] zFunction(String s) {
-		System.out.println("here");
 		int n=s.length();
 		int z[]=new int[n];
 		int l=0, r=0;

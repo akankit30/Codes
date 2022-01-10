@@ -4,13 +4,12 @@ import java.util.*;
 
 public class FloydWarshall {
 	static double[][] g,dp;
+	
 	static int[][]next;
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		int n=9;
 		init(n);
-		
 	}
 	static void solve(int n) {
 		for(int i=0;i<n;i++) {
@@ -19,6 +18,7 @@ public class FloydWarshall {
 				next[i][j]=j;
 			}
 		}
+		
 		for(int k=0;k<n;k++) {
 			for(int i=0;i<n;i++)
 				for(int j=0;j<n;j++) {

@@ -2,49 +2,89 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+//import java.text.DecimalFormat;
 import java.util.*;
 
+//import sun.jvm.hotspot.runtime.linux_aarch64.LinuxAARCH64JavaThreadPDAccess;
 
+
+ 
 public class B {
-	
-	static int mod =1000000007; 
-	
+	static int mod= 998244353;
+
 	public static void main(String[] args) throws Exception {
 		PrintWriter out=new PrintWriter(System.out);
-	    FastScanner fs=new FastScanner();
-//	    long a=fs.nextLong(),b=fs.nextLong();
-//	    System.out.println(find(4,10));
-	    for(int i=1;i<=100;i++) {
-	    	System.out.println(i+" "+find(1,i));
-	    }
-	    out.close();
-	}
-	public static int find(long a,long b) {
-		int ans=0;
-	    for(long i=a+1;i<=b;i++) {
-	    	ans+=count(i-1,i);
-	    }
-	   return ans;
-	}
-	public static int count(long a,long b) {
-		int ans=0;
-		a=a^b;
-		for(int j=0;j<60;j++) {
-			if((a&(1<<j))!=0) ans++;
+		FastScanner fs=new FastScanner();
+		int t=fs.nextInt();
+		outer:while(t-->0) {
+			int n=fs.nextInt(), k=fs.nextInt();
+			char arr[]=fs.next().toCharArray();
+			int l=1,r=n;
+			while(l<r) {
+				int mid=(l+r+1)/2;
+				if(check(arr,mid,k)) {
+					l=mid;
+				}
+				else r=mid-1;
+			}
+//			System.out.println(check(arr,3,k));
+			out.println(l);
 		}
-		return ans;
+		
+		out.close();
+		
 	}
-	static void rev(char arr[]) {
-		int i=0,j=arr.length-1;
-		while(i<j) {
-			char temp=arr[i];
-			arr[i]=arr[j];
-			arr[j]=temp;
-			i++; j--;
+	static boolean check(char arr[],int l,int k) {
+		int cnt[]=new int[26];
+		for(char c:arr) {
+			cnt[c-'a']++;
 		}
+		int one=0;
+		int i=0,j=0;
+		int cur=l;
+		while(i<26&&j<k) {
+			
+			int req=cur/2;
+			int max=cnt[i]/2;
+			cur-= Math.min(req*2, max*2);
+			cnt[i]-=Math.min(req*2, max*2);
+			
+			if(cur<=1) {
+				cur=l;
+				j++;
+			}
+			if(cnt[i]<=1) {
+				one+=cnt[i]%2;
+				i++;
+			}
+			
+		}
+		while(i<26) {
+			one+=cnt[i++];
+		}
+//		System.out.println(one);
+		int ro=0;
+		if(l%2!=0) {
+			ro=k;
+		}
+		
+		return j==k&&ro<=one;
 	}
-	
-	static long gcd(long  a,long  b) {
+	static long pow(long a,long b) {
+		if(b<0) return 1;
+		long res=1;
+		while(b!=0) {
+			if((b&1)!=0) {
+				res*=a;
+				res%=mod;
+			}
+			a*=a;
+			a%=mod;
+			b=b>>1;
+		}
+		return res;
+	}
+	static int gcd(int  a,int  b) {
 		if(b==0) return a;
 		return gcd(b,a%b);
 	}
@@ -60,6 +100,7 @@ public class B {
 		return res;
 	}
 	static long fact(long n) {
+//		return fact[(int)n];
 		long res=1;
 		for(int i=2;i<=n;i++) {
 			res*=i;
@@ -67,19 +108,7 @@ public class B {
 		}
 		return res;
 	}
-	static long pow(long a,long b) {
-		long res=1;
-		while(b!=0) {
-			if((b&1)!=0) {
-				res*=a;
-				res%=mod;
-			}
-			a*=a;
-			a%=mod;
-			b=b>>1;
-		}
-		return res;
-	}
+	
 	static long modInv(long n) {
 		return pow(n,mod-2);
 	}
@@ -115,6 +144,11 @@ public class B {
 		
 		int nextInt() {
 			return Integer.parseInt(next());
+		}
+		long[] lreadArray(int n) {
+			long a[]=new long[n];
+			for(int i=0;i<n;i++) a[i]=nextLong();
+			return a;
 		}
 		int[] readArray(int n) {
 			int[] a=new int[n];

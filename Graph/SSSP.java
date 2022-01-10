@@ -48,6 +48,7 @@ public class SSSP {
 		while(!q.isEmpty()) {
 			Node cur=q.poll();
 			vst[cur.node]=true;
+			if(dist[cur.node]<cur.cost) continue;
 			for(Node next:g.get(cur.node)) {
 				if(vst[next.node]) continue;
 				int newdist=dist[cur.node]+next.cost;

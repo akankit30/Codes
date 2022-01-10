@@ -29,6 +29,7 @@ public class BridgeAndArticulation {
 		vst[u]=true;
 		disc[u]=low[u]=++time;
 		for(int v:adj[u]) {
+			if(v==parent) continue;
 			if(!vst[v]) {
 				findBridge(v,u,disc,low,vst,bridges);
 				low[u]=Math.min(low[u], low[v]);
@@ -37,31 +38,30 @@ public class BridgeAndArticulation {
 					bridges.add(v);
 				}
 			}
-			else if(v!=parent) {
+			else{
 				low[u]=Math.min(low[u],disc[v]);
 			}
 		}
 	}
-	static void findAtcPoint(int u,int parent,int disc[],int low[],boolean vst[],boolean isA[]) {
+	static void findAtcPoint(int u,int p,int disc[],int low[],boolean vst[],boolean isA[]) {
 		vst[u]=true;
 		int childrens=0;
 		disc[u]=low[u]=++time;
 		for(int v:adj[u]) {
-			if(!vst[v]) {
-				childrens++;
-				findAtcPoint(v,u,disc,low,vst,isA);
-				low[u]=Math.min(low[u], low[v]);
-				if(parent==-1&&childrens>1) {
-					isA[u]=true;
-				}
-				if(parent!=-1&&low[v]>=disc[u]) {
-					isA[u]=true;
-				}
+			if(v==p) continue;
+			if(vst[v]) {
+				low[u]=Math.min(low[u], disc[v]);
 			}
-			else if(v!=parent) {
-				low[u]=Math.min(low[u],disc[v]);
+			else {
+				findAtcPoint(v,u,disc,low,vst,isA);
+				low[v]=Math.min(low[v], low[u]);
+				if(low[v]>=low[u]&&p!=-1) {
+					isA[u]=true;
+				}
+				childrens++;
 			}
 		}
+		if(p==-1&&childrens>1) isA[u]=true;
 	}
 
 }

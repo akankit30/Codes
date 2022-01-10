@@ -6,21 +6,13 @@ public class SoE {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int n=15;
-//		boolean arr[]=new boolean[n+1];
-//		sieveOfEratosthenes(arr);
-//		for(int i=0;i<=n;i++)
-//			System.out.println(i+" "+arr[i]);
-//		for(boolean ele:arr)
-//			System.out.print(ele+" ");
-		int lpf[]=leastPrimeFactor(60);
-		List<Integer> pfs=primefactors(lpf,60);
-		for(int ele:pfs) {
-			System.out.print(ele+" ");
-		}
-		System.out.println();
+		int n=1000000;
+		int lpf[]=new int[n+1];
+		leastPrimeFactor(lpf,n);
+	    List<Integer> div = primefactors(lpf,10005);
+	    for(int ele:div) System.out.print(ele+" ");
 	}
-	public static void sieveOfEratosthenes(boolean arr[]) {
+	static void sieveOfEratosthenes(boolean arr[]) {
 		Arrays.fill(arr, true);
 		int n=arr.length;
 		arr[0]=arr[1]=false;
@@ -31,35 +23,35 @@ public class SoE {
 				arr[j]=false;
 		}
 	}
-	private static void divisors(List<Integer> div[],int max) {
+	static void divisors(List<Integer> div[],int max) {
 		for(int i=2;i<max;i++) {
 			for(int j=2*i;j<max;j+=i) {
 				div[j].add(i);
 			}
 		}
 	}
-	private static void leastPrimeFactor(int lpf[],int max) {
+	static void leastPrimeFactor(int lpf[],int max) {
 		List<Integer> pfs=new ArrayList<>();
 		for(int i=2;i<=max;i++) {
 			if(lpf[i]==0) {
 				pfs.add(i);
 				lpf[i]=i;
 			}
-			System.out.println(pfs);
+			
 			for(int j=0;j<pfs.size()&&pfs.get(j)<=lpf[i]&&i*pfs.get(j)<=max;j++) {
 				lpf[i*pfs.get(j)]=pfs.get(j);
 			}
 		}
 	}
-	private static int[] leastPrimeFactor(int max) {
+	static int[] leastPrimeFactor(int max) {
 		int arr[]=new int[max+1];
 		Arrays.fill(arr, -1);
 		for(int i=2;i<=max;i++) {
 			if(arr[i]==-1) {
 				arr[i]=i;
-				for(int j=i*i;j<=max;j+=i) {
-					if(arr[j]==-1) {
-						arr[j]=i;
+				for(long j=(long)i*i;j<=max;j+=i) {
+					if(arr[(int)j]==-1) {
+						arr[(int)j]=i;
 					}
 				}
 			}
