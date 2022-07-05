@@ -9,6 +9,9 @@ public class SegmentTreeLazyProp {
 		int l=0,r=n-1;
 		ST st=new ST(l,r);
 	}
+	// segment tree code with lazy propogation in which we need index of min/max element
+	// link : https://codeforces.com/contest/1208/submission/153649920
+	
 	static class ST {
 		int leftmost, rightmost;
 		ST lChild, rChild;

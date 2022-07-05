@@ -4,7 +4,7 @@ public class ZFunction {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		for(int ele:zFunction("abacaba")) {
+		for(int ele:zFunction("azbazbzaz")) {
 			System.out.print(ele+" ");
 		}
 	

@@ -2,73 +2,42 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+//import java.text.DecimalFormat;
 import java.util.*;
-import java.text.DecimalFormat;
-
-
-
  
- 
-public class Solution {
+public class SoftwareReliablity {
+	static int mod= 998244353;
 	
-	static long mod=1000000007 ;
-	static long cnt, num;
-//	7 4 3 8 1 6 2 9 5 10
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 		PrintWriter out=new PrintWriter(System.out);
-	    FastScanner fs=new FastScanner();
-	    DecimalFormat formatter= new DecimalFormat("#0.000000");
-	    int t=fs.nextInt();
-	    
-	    outer:for(int time=1;time<=t;time++) {
-	    	int n=fs.nextInt(), q=fs.nextInt();
-	    	char arr[]=fs.next().toCharArray();
-	    	int cnt[][]=new int[26][n+1];
-	    	for(int i=1;i<=n;i++) {
-	    		for(int j=0;j<26;j++) cnt[j][i]=cnt[j][i-1];
-	    		int ind = arr[i-1]-'A';
-	    		cnt[ind][i]++;
-	    	}
-	        int ans=0;
-	        while(q-->0) {
-	        	int l=fs.nextInt(), r=fs.nextInt();
-	        	int e=0, o=0;
-	        	for(int i=0;i<26;i++) {
-	        		if((cnt[i][r]-cnt[i][l-1])%2==0) e++;
-	        		else o++;
-	        	}
-	        	if(o<=1) ans++;
-	        }
-	    	out.println("Case #"+time+": "+ans);
-	    }
-//	    out.println("Case #"+time+": "+ans);
-	    out.close();
+		FastScanner fs=new FastScanner();
+		double p[]= { 0.3,0.2, 0.4,0.1};
+		dsRandom(p);
+		
+		out.close();
+		
 	}
-	static void recur(StringBuilder str, int cur) {
-		if(str.length()==0) {
-			cnt++;
-			cur++;
-			num+=cur;
-			return ;
+	static void dsRandom(double p[]) {
+		// p[i]= problablit of i+1;
+		double ex=0, variance=0;
+		int n=p.length;
+		for(int i=0;i<n;i++) ex+= p[i]*(i+1);
+		for(int i=0;i<n;i++) {
+			
+			variance+= (i+1-ex)*(i+1-ex)*p[i];
 		}
-		cur+= check(str);
-		for(int i=0;i<str.length();i++) {
-			StringBuilder temp= new StringBuilder(str);
-			str.deleteCharAt(i);
-			recur(str,cur);
-			str= temp;
-		}
-		return ;
+		System.out.println(ex);
+		System.out.println(variance);
 	}
-	static int check(StringBuilder str) {
-		int l=0, r=str.length()-1
-				;
-		while(l<r) {
-			if(str.charAt(l)!=str.charAt(r)) return 0;
-			l++; r--;
-		}
-		return 1;
+	static void bionomial(int n,int x,int p,int q) {
+		double px=0, ex=n*p, vx=n*p*q;
+		px= nck(n,x)*Math.pow(p,x)*Math.pow(q, n-x);
+	}
+	static void poisson(int x,int miu) {
+		double ex=miu, vx=miu;
+		double px = Math.pow(2.71828, -miu)*Math.pow(miu, x);
+		px/=fact(x);
+		
 	}
 	static long pow(long a,long b) {
 		if(b<0) return 1;
@@ -84,27 +53,20 @@ public class Solution {
 		}
 		return res;
 	}
-	static long gcd(long  a,long  b) {
+	static int gcd(int  a,int  b) {
 		if(b==0) return a;
 		return gcd(b,a%b);
 	}
 	static long nck(int n,int k) {
 		if(k>n) return 0;
 		long res=1;
-		res*=fact(n);
-		res%=mod;
-		res*=modInv(fact(k));
-		res%=mod;
-		res*=modInv(fact(n-k)); 
-		res%=mod;
+		for(int i=k+1;i<=n;i++) res*=i;
+		for(int i=1;i<=n-k;i++) res/=i;
 		return res;
 	}
 	static long fact(long n) {
 		long res=1;
-		for(int i=2;i<=n;i++) {
-			res*=i;
-			res%=mod;
-		}
+		for(int i=1;i<=n;i++) res*=i;
 		return res;
 	}
 	

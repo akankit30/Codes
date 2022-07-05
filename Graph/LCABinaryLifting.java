@@ -49,7 +49,7 @@ public class LCABinaryLifting {
 	static void dfs(int a,int p) {
 		tin[a]=++timer;
 		up[a][0]=p;
-		for(int j=1;j<log;j++) {
+		for(int j=1;j<=log;j++) {
 			up[a][j]=up[up[a][j-1]][j-1];
 		}
 		for(int child:adj.get(a)) {
